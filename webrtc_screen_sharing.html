@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC Screen Sharing</title>
+</head>
+<body>
+    <h1>WebRTC Screen Sharing</h1>
+    
+    <!-- สร้างปุ่มสำหรับเริ่มการแชร์หน้าจอ -->
+    <button id="startSharing">Start Screen Sharing</button>
+    
+    <script>
+        // จัดเก็บการเชื่อมต่อของหน้าจอของผู้ใช้
+        let screenStream;
+
+        // เมื่อปุ่ม Start Screen Sharing ถูกคลิก
+        document.getElementById('startSharing').addEventListener('click', async () => {
+            try {
+                // ขอเข้าถึงหน้าจอของผู้ใช้
+                screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+
+                // สร้าง URL สำหรับการแชร์หน้าจอ
+                const screenSharingURL = window.location.href + '?screenSharing=true';
+
+                // แสดง URL สำหรับการแชร์หน้าจอ
+                alert('Share this URL for screen sharing: ' + screenSharingURL);
+            } catch (error) {
+                console.error('Error accessing screen: ', error);
+            }
+        });
+
+        // หากผู้ใช้เข้ามาผ่าน URL ที่มีพารามิเตอร์ 'screenSharing' เป็น true
+        const urlParams = new URLSearchParams(window.location.search);
+        const isScreenSharing = urlParams.get('screenSharing');
+        if (isScreenSharing === 'true') {
+            // เรียกใช้ฟังก์ชันสำหรับการแชร์หน้าจอ
+            startScreenSharing();
+        }
+    </script>
+</body>
+</html>
